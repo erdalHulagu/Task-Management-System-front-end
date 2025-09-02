@@ -1,0 +1,86 @@
+/* 🔹 Genel ayarlar */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #74ebd5, #ACB6E5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+/* 🔹 Container */
+.container {
+    background: #fff;
+    padding: 30px 40px;
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    text-align: center;
+    width: 400px;
+}
+
+/* 🔹 Başlık */
+h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+/* 🔹 Form elemanları */
+.form input {
+    width: calc(50% - 10px);
+    padding: 10px;
+    margin: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
+.form button {
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: none;
+    background-color: #6C63FF;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: 0.3s;
+}
+
+.form button:hover {
+    background-color: #574fd6;
+}
+
+/* 🔹 Task listesi */
+.tasks {
+    margin-top: 20px;
+    text-align: left;
+}
+
+.tasks ul {
+    list-style: none;
+    padding: 0;
+}
+
+.tasks li {
+    background: #f4f4f4;
+    margin: 8px 0;
+    padding: 10px 15px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.tasks button {
+    background: #FF6B6B;
+    border: none;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.tasks button:hover {
+    background: #e05555;
+}
