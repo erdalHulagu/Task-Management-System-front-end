@@ -1,11 +1,11 @@
 // Mesaj kutusu
-function showMessage(text, type) {
-    const msg = document.getElementById("message");
-    msg.textContent = text;
-    msg.className = type;
-    msg.style.display = "block";
-    setTimeout(() => msg.style.display = "none", 3000);
+function showMessage(msg, isError = false) {
+    const messageDiv = document.getElementById("message");
+    if (!messageDiv) return; // element yoksa hata verme
+    messageDiv.textContent = msg;
+    messageDiv.style.color = isError ? "red" : "green";
 }
+
 
 // Görevleri yükle
 async function loadTasks() {
