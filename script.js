@@ -1,64 +1,106 @@
-const taskList = document.getElementById('taskList');
-const titleInput = document.getElementById('title');
-const descInput = document.getElementById('desc');
-
-// 🔹 Tüm taskleri getir
-const SERVER_URL = "http://localhost:8000";
-
-function loadTasks() {
-    fetch(`${SERVER_URL}/tasks`)
-        .then(res => res.json())
-        .then(data => {
-            const list = document.getElementById("task-list");
-            list.innerHTML = "";
-            data.forEach(task => {
-                const li = document.createElement("li");
-                li.textContent = `[${task.id}] ${task.title} - ${task.description}`;
-                list.appendChild(li);
-            });
-        });
+// Mesaj kutusu
+function showMessage(text, type) {
+    const msg = document.getElementById("message");
+    msg.textContent = text;
+    msg.className = type;
+    msg.style.display = "block";
+    setTimeout(() => msg.style.display = "none", 3000);
 }
 
-function addTask() {
-    const title = document.getElementById("title").value;
-    const desc  = document.getElementById("desc").value;
+// Görevleri yükle
+async function loadTasks() {
+    try {
+        const res = await fetch("http://localhost:8000/tasks");
+        const tasks = await res.json();
 
-    fetch(`${SERVER_URL}/add?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(desc)}`)
-        .then(() => {
+        const list = document.getElementById("taskList");
+        list.innerHTML = "";
+
+        tasks.forEach(task => {
+            const li = document.createElement("li");
+            li.className = "task-item";
+
+            li.innerHTML = `
+                <div>
+                    <h3>${task.title}</h3>
+                    <p>${task.description}</p>
+                </div>
+                <div>
+                    <button class="update-btn" onclick="updateTask(${task.id}, '${task.title}', '${task.description}')">✏️</button>
+                    <button class="delete-btn" onclick="deleteTask(${task.id})">🗑️</button>
+                </div>
+            `;
+
+            list.appendChild(li);
+        });
+    } catch (err) {
+        showMessage("Görevler yüklenemedi!", "error");
+        console.error(err);
+    }
+}
+
+// Yeni görev ekle
+async function addTask() {
+    const title = document.getElementById("title").value.trim();
+    const desc = document.getElementById("desc").value.trim();
+
+    if (!title || !desc) {
+        showMessage("Lütfen tüm alanları doldurun!", "error");
+        return;
+    }
+
+    try {
+        const res = await fetch(`http://localhost:8000/add?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(desc)}`);
+        if (res.ok) {
+            showMessage("Görev eklendi!", "success");
+            document.getElementById("title").value = "";
+            document.getElementById("desc").value = "";
             loadTasks();
-            document.getElementById("title").value = "";
-            document.getElementById("desc").value = "";
-        });
+        } else {
+            showMessage("Görev eklenemedi!", "error");
+        }
+    } catch (err) {
+        showMessage("Sunucuya bağlanılamadı!", "error");
+    }
 }
 
-
-// 🔹 Task ekle
-function addTask() {
-    let title = document.getElementById("title").value;
-    let desc = document.getElementById("desc").value;
-
-    fetch(`/add?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(desc)}`)
-        .then(() => {
-            loadTasks();  // Listeyi güncelle
-            document.getElementById("title").value = "";
-            document.getElementById("desc").value = "";
-        });
+// Görev sil
+async function deleteTask(id) {
+    try {
+        const res = await fetch(`http://localhost:8000/delete?id=${id}`);
+        if (res.ok) {
+            showMessage("Görev silindi!", "success");
+            loadTasks();
+        } else {
+            showMessage("Görev silinemedi!", "error");
+        }
+    } catch (err) {
+        showMessage("Sunucuya bağlanılamadı!", "error");
+    }
 }
 
-// 🔹 Task sil
-function deleteTask(id) {
-    fetch(`/delete?id=${id}`)
-        .then(() => loadTasks());
+// Görev güncelle
+async function updateTask(id, oldTitle, oldDesc) {
+    const newTitle = prompt("Yeni başlık:", oldTitle);
+    const newDesc = prompt("Yeni açıklama:", oldDesc);
+
+    if (!newTitle || !newDesc) {
+        showMessage("Güncelleme iptal edildi.", "error");
+        return;
+    }
+
+    try {
+        const res = await fetch(`http://localhost:8000/update?id=${id}&title=${encodeURIComponent(newTitle)}&desc=${encodeURIComponent(newDesc)}`);
+        if (res.ok) {
+            showMessage("Görev güncellendi!", "success");
+            loadTasks();
+        } else {
+            showMessage("Görev güncellenemedi!", "error");
+        }
+    } catch (err) {
+        showMessage("Sunucuya bağlanılamadı!", "error");
+    }
 }
 
-// 🔹 Task güncelle (başlık)
-function updateTask(id) {
-    const newTitle = prompt("Enter new title:");
-    if(!newTitle) return;
-
-    fetch(`/update?id=${id}&title=${encodeURIComponent(newTitle)}`)
-        .then(() => loadTasks());
-}
-
-// 🔹 Sayfa yüklendiğinde
+// Sayfa açılınca görevleri yükle
 window.onload = loadTasks;
