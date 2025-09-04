@@ -23,15 +23,20 @@ export class Login {
 
         try {
             const res = await fetch(`http://localhost:8000/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
-            if (res.ok) {
-                const data = await res.json();
-                sessionStorage.setItem("userId", data.id);
-                this.onSuccess(); // Task Manager componentine geçiş
+            if(res.ok){
+                const data = await res.json(); // { id: "userId", fullName: "Ad Soyad" }
+                this.onSuccess(data.id); // TaskManager componentine userId gönder
             } else {
-                document.getElementById("message").textContent = "❌ Geçersiz email veya şifre!";
+                this.showMessage("Email veya şifre yanlış!", true);
             }
-        } catch (err) {
-            document.getElementById("message").textContent = "❌ Sunucuya bağlanılamadı!";
+        } catch(err) {
+            this.showMessage("Sunucuya bağlanılamadı!", true);
         }
+    }
+
+    showMessage(msg, isError=false){
+        const messageDiv = document.getElementById("message");
+        messageDiv.textContent = msg;
+        messageDiv.style.color = isError ? "red" : "green";
     }
 }
