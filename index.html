@@ -6,21 +6,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>Task Manager</h1>
-
-        <div class="form">
-            <input type="text" id="title" placeholder="Task Title">
-            <input type="text" id="desc" placeholder="Task Description">
-            <button onclick="addTask()">Add Task</button>
-        </div>
-        <div id="message" style="color:red; text-align:center; margin:10px;"></div>
-
-        <div class="tasks">
-            <ul id="taskList"></ul>
-        </div>
+    <div class="container" id="mainContainer">
+        <!-- Buraya JS componentleri render edecek -->
     </div>
 
-    <script src="script.js"></script>
+    <!-- Componentleri import et -->
+    <script type="module" src="./register/register.js"></script>
+    <script type="module" src="./login/Login.js"></script>
+    <script type="module" src="./taskManager/task-manager.js"></script>
+    <script type="module" src="main.js"></script> <!-- Ana JS -->
 </body>
 </html>
