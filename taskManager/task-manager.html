@@ -3,82 +3,56 @@
 <head>
     <meta charset="UTF-8">
     <title>Task Manager</title>
-    <link rel="stylesheet" href="taskManager.css">
+    <link rel="stylesheet" href="task-management.css">
 </head>
 <body>
-    <div class="container">
-        <h1>My Tasks</h1>
-
-        <!-- Mesaj alanı -->
-        <div id="message"></div>
-
-        <!-- Yeni görev ekleme formu -->
-        <div class="form">
-            <input type="text" id="title" placeholder="Task Title">
-            <input type="text" id="desc" placeholder="Task Description">
-            <button id="addBtn">Add Task</button>
+    <div class="container" id="taskContainer">
+        <!-- Sol Profil Paneli -->
+        <div class="profile-panel">
+            <h2>Profil Bilgileri</h2>
+            <div class="profile-field">
+                <span>Ad Soyad:</span>
+                <span id="fullName"></span>
+                <button class="edit-btn" data-field="fullName">✏️</button>
+            </div>
+            <div class="profile-field">
+                <span>Telefon:</span>
+                <span id="phone"></span>
+                <button class="edit-btn" data-field="phone">✏️</button>
+            </div>
+            <div class="profile-field">
+                <span>Cinsiyet:</span>
+                <span id="gender"></span>
+                <button class="edit-btn" data-field="gender">✏️</button>
+            </div>
+            <div class="profile-field">
+                <span>Adres:</span>
+                <span id="address"></span>
+                <button class="edit-btn" data-field="address">✏️</button>
+            </div>
+            <div class="profile-field">
+                <span>Email:</span>
+                <span id="email"></span>
+                <!-- Email düzenlemesi olmayacak -->
+            </div>
+            <button id="logoutBtn">Çıkış Yap</button>
         </div>
 
-        <!-- Görev listesi -->
-        <div class="tasks">
+        <!-- Sağ Görev Listesi -->
+        <div class="tasks-panel">
+            <h2>My Tasks</h2>
+            <div id="message"></div>
+
+            <div class="form">
+                <input type="text" id="title" placeholder="Task Title">
+                <input type="text" id="desc" placeholder="Task Description">
+                <button id="addBtn">Add Task</button>
+            </div>
+
             <ul id="taskList"></ul>
         </div>
     </div>
 
-    <script src="task-manager.js"></script>
+    <script type="module" src="task-management.js"></script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -15,10 +15,14 @@ export class Register {
             <input type="email" id="email" placeholder="Email">
             <input type="password" id="password" placeholder="Şifre">
             <button id="registerBtn">Kayıt Ol</button>
+            <div style="margin-top: 10px;">
+                <button id="toLoginBtn" style="background:none; border:none; color:#1e3c72; cursor:pointer;">Zaten hesabım var? Giriş Yap</button>
+            </div>
             <div id="message"></div>
         `;
 
         document.getElementById("registerBtn").addEventListener("click", () => this.registerUser());
+        document.getElementById("toLoginBtn").addEventListener("click", () => this.goToLogin());
     }
 
     async registerUser() {
@@ -34,14 +38,26 @@ export class Register {
         try {
             const res = await fetch(`http://localhost:8000/register?fullName=${encodeURIComponent(data.fullName)}&phone=${encodeURIComponent(data.phone)}&gender=${encodeURIComponent(data.gender)}&address=${encodeURIComponent(data.address)}&email=${encodeURIComponent(data.email)}&password=${encodeURIComponent(data.password)}`);
             
-            if(res.ok){
+            if (res.ok) {
                 document.getElementById("message").textContent = "✅ Kayıt başarılı!";
                 this.onSuccess(); // Login componentine geçiş
             } else {
                 document.getElementById("message").textContent = "❌ Kayıt başarısız!";
             }
-        } catch(err) {
+        } catch (err) {
             document.getElementById("message").textContent = "❌ Sunucuya bağlanılamadı!";
         }
+    }
+
+    goToLogin() {
+        // Container temizlenip Login componenti çağrılacak
+        this.container.innerHTML = "";
+        import("../login/Login.js").then(module => {
+            new module.Login(this.container, (userId) => {
+                import("../taskManager/task-manager.js").then(tmModule => {
+                    new tmModule.TaskManager(this.container, userId);
+                });
+            });
+        });
     }
 }
