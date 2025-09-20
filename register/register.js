@@ -39,13 +39,13 @@ export class Register {
             const res = await fetch(`http://localhost:8000/register?fullName=${encodeURIComponent(data.fullName)}&phone=${encodeURIComponent(data.phone)}&gender=${encodeURIComponent(data.gender)}&address=${encodeURIComponent(data.address)}&email=${encodeURIComponent(data.email)}&password=${encodeURIComponent(data.password)}`);
             
             if (res.ok) {
-                document.getElementById("message").textContent = "✅ Kayıt başarılı!";
+                document.getElementById("message").textContent = "Kayıt başarılı!";
                 this.onSuccess(); // Login componentine geçiş
             } else {
-                document.getElementById("message").textContent = "❌ Kayıt başarısız!";
+                document.getElementById("message").textContent = "Kayıt başarısız!";
             }
         } catch (err) {
-            document.getElementById("message").textContent = "❌ Sunucuya bağlanılamadı!";
+            document.getElementById("message").textContent = "Sunucuya bağlanılamadı!";
         }
     }
 
