@@ -1,50 +1,42 @@
 body {
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
     margin: 0;
     padding: 0;
-    color: #333;
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-/* Ana sayfa wrapper */
-.page-wrapper {
+#mainLayout {
     display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    width: 80%; /* %10 boşluk sağ + %10 boşluk sol */
-    height: 90vh;
-    background: #f5f6fa;
+    width: 100%;
+    height: 90vh;        /* ekranın çoğu yüksekliğini kaplasın */
+    padding: 0 10%;      /* sağ ve sol boşluk */
+    box-sizing: border-box;
+}
+
+#profileContainer {
+    width: 25%;
+    background: #fff;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+    padding: 20px;
     border-radius: 16px;
-    box-shadow: 0 8px 20px rgba(0,0,0,0.25);
-    padding: 20px;
-    gap: 20px;
-}
-
-/* Login Paneli (sol) */
-.login-panel {
-    flex: 0 0 25%;
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    text-align: center;
-}
-
-/* Task Paneli (sağ) */
-.task-panel {
-    flex: 0 0 55%;
-    background: #fff;
-    padding: 20px;
-    border-radius: 12px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
     overflow-y: auto;
 }
 
-/* Form elemanları */
+#taskContainer {
+    width: 55%;
+    background: #f5f6fa;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    padding: 20px;
+    margin-left: 20px;
+    border-radius: 16px;
+    overflow-y: auto;
+}
+
+/* Form ve input/button stilleri */
 input {
     width: 90%;
     padding: 10px;
@@ -57,6 +49,7 @@ input:focus {
     border-color: #1e3c72;
     box-shadow: 0 0 5px rgba(30,60,114,0.5);
 }
+
 button {
     padding: 10px 18px;
     margin-top: 10px;
@@ -76,9 +69,10 @@ ul {
     list-style: none;
     padding: 0;
     margin-top: 20px;
-    max-height: 300px;
+    max-height: 400px;
     overflow-y: auto;
 }
+
 .task-item {
     background: #fff;
     margin: 10px 0;
@@ -89,25 +83,7 @@ ul {
     justify-content: space-between;
     align-items: center;
 }
-.task-item h3 {
-    margin: 0;
-    color: #1e3c72;
-    font-size: 18px;
-}
-.task-item p {
-    margin: 5px 0 0;
-    color: #555;
-    font-size: 14px;
-}
-.delete-btn {
-    background: #e74c3c;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 14px;
-}
-.delete-btn:hover {
-    background: #c0392b;
-}
+
 .update-btn {
     background: #f39c12;
     padding: 8px 12px;
@@ -115,8 +91,20 @@ ul {
     font-size: 14px;
     margin-right: 5px;
 }
+
 .update-btn:hover {
     background: #d68910;
+}
+
+.delete-btn {
+    background: #e74c3c;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+}
+
+.delete-btn:hover {
+    background: #c0392b;
 }
 
 #message {

@@ -2,22 +2,22 @@ import { Login } from "./login/Login.js";
 import { Register } from "./register/register.js";
 import { TaskManager } from "./taskManager/task-manager.js";
 
-const container = document.getElementById("mainContainer");
+const profileContainer = document.getElementById("profileContainer");
+const taskContainer = document.getElementById("taskContainer");
 
-// Burada bir "localStorage" kontrolü ile örnek olarak login durumunu saklayabiliriz
 const savedUserId = localStorage.getItem("userId");
 
 if (savedUserId) {
-    // Eğer daha önce login olmuşsa direkt TaskManager aç
-    new TaskManager(container, savedUserId);
+    // Daha önce giriş yapıldıysa direkt TaskManager aç
+    new TaskManager(taskContainer, savedUserId);
+    // Profil bilgilerini de yüklemek için Login yerine Profile component eklenebilir
 } else {
     // Önce register göster
-    new Register(container, () => {
-        // Register başarılıysa login göster
-        new Login(container, (userId) => {
-            // Login başarılıysa TaskManager aç
-            localStorage.setItem("userId", userId); // Login durumunu sakla
-            new TaskManager(container, userId);
+    new Register(profileContainer, () => {
+        // Kayıt başarılıysa login göster
+        new Login(profileContainer, (userId) => {
+            localStorage.setItem("userId", userId);
+            new TaskManager(taskContainer, userId);
         });
     });
 }
