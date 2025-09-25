@@ -6,12 +6,12 @@ export class TaskManager {
         this.profileContainer = profileContainer;
         this.userId = userId;
 
-        this.profile = new Profile(this.profileContainer, this.userId);
-
-        this.render();
+        this.renderTaskPanel();
+        this.loadProfile();
+        this.loadTasks();
     }
 
-    render() {
+    renderTaskPanel() {
         this.taskContainer.innerHTML = `
             <h2>My Tasks</h2>
             <div id="message"></div>
@@ -24,8 +24,10 @@ export class TaskManager {
         `;
 
         document.getElementById("addBtn").addEventListener("click", () => this.addTask());
+    }
 
-        this.loadTasks();
+    async loadProfile() {
+        this.profile = new Profile(this.profileContainer, this.userId);
     }
 
     async loadTasks() {
@@ -34,7 +36,6 @@ export class TaskManager {
             const tasks = await res.json();
             const list = document.getElementById("taskList");
             list.innerHTML = "";
-
             tasks.forEach(task => {
                 const li = document.createElement("li");
                 li.className = "task-item";
@@ -69,26 +70,6 @@ export class TaskManager {
         } catch (err) { this.showMessage("Sunucuya bağlanılamadı!", true); }
     }
 
-    async deleteTask(id) {
-        try {
-            const res = await fetch(`http://localhost:8000/delete?id=${id}&userId=${this.userId}`);
-            if (res.ok) { this.showMessage("Görev silindi!"); this.loadTasks(); }
-            else this.showMessage("Görev silinemedi!", true);
-        } catch (err) { this.showMessage("Sunucuya bağlanılamadı!", true); }
-    }
-
-    async updateTask(id, oldTitle, oldDesc) {
-        const newTitle = prompt("Yeni başlık:", oldTitle);
-        const newDesc = prompt("Yeni açıklama:", oldDesc);
-        if (!newTitle) { this.showMessage("Güncelleme iptal edildi.", true); return; }
-
-        try {
-            const res = await fetch(`http://localhost:8000/update?id=${id}&title=${encodeURIComponent(newTitle)}&desc=${encodeURIComponent(newDesc)}&userId=${this.userId}`);
-            if (res.ok) { this.showMessage("Görev güncellendi!"); this.loadTasks(); }
-            else this.showMessage("Görev güncellenemedi!", true);
-        } catch (err) { this.showMessage("Sunucuya bağlanılamadı!", true); }
-    }
-
     showMessage(msg, isError=false) {
         const messageDiv = document.getElementById("message");
         messageDiv.textContent = msg;
@@ -98,5 +79,3 @@ export class TaskManager {
         setTimeout(()=>{ messageDiv.style.display="none"; },3000);
     }
 }
-
-window.taskManager = null;
