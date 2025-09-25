@@ -7,7 +7,7 @@ export class Register {
 
     render() {
         this.container.innerHTML = `
-            <h1>Register</h1>
+            <h1>Kayıt Ol</h1>
             <input type="text" id="fullName" placeholder="Ad Soyad">
             <input type="text" id="phone" placeholder="Telefon">
             <input type="text" id="gender" placeholder="Cinsiyet">
@@ -16,7 +16,9 @@ export class Register {
             <input type="password" id="password" placeholder="Şifre">
             <button id="registerBtn">Kayıt Ol</button>
             <div style="margin-top: 10px;">
-                <button id="toLoginBtn" style="background:none; border:none; color:#1e3c72; cursor:pointer;">Zaten hesabım var? Giriş Yap</button>
+                <button id="toLoginBtn" style="background:none; border:none; color:#1e3c72; cursor:pointer;">
+                    Zaten hesabım var? Giriş Yap
+                </button>
             </div>
             <div id="message"></div>
         `;
@@ -37,27 +39,35 @@ export class Register {
 
         try {
             const res = await fetch(`http://localhost:8000/register?fullName=${encodeURIComponent(data.fullName)}&phone=${encodeURIComponent(data.phone)}&gender=${encodeURIComponent(data.gender)}&address=${encodeURIComponent(data.address)}&email=${encodeURIComponent(data.email)}&password=${encodeURIComponent(data.password)}`);
-            
+
             if (res.ok) {
-                document.getElementById("message").textContent = "Kayıt başarılı!";
-                this.onSuccess(); // Login componentine geçiş
+                this.showMessage("Kayıt başarılı!");
+                this.onSuccess();
             } else {
-                document.getElementById("message").textContent = "Kayıt başarısız!";
+                this.showMessage("Kayıt başarısız!", true);
             }
         } catch (err) {
-            document.getElementById("message").textContent = "Sunucuya bağlanılamadı!";
+            this.showMessage("Sunucuya bağlanılamadı!", true);
         }
     }
 
     goToLogin() {
-        // Container temizlenip Login componenti çağrılacak
         this.container.innerHTML = "";
         import("../login/Login.js").then(module => {
             new module.Login(this.container, (userId) => {
-                import("../taskManager/task-manager.js").then(tmModule => {
-                    new tmModule.TaskManager(this.container, userId);
+                import("../taskManager/TaskManager.js").then(tmModule => {
+                    window.taskManager = new tmModule.TaskManager(document.getElementById("taskContainer"), document.getElementById("profileContainer"), userId);
                 });
             });
         });
+    }
+
+    showMessage(msg, isError = false) {
+        const messageDiv = document.getElementById("message");
+        messageDiv.textContent = msg;
+        messageDiv.style.display = "block";
+        messageDiv.style.background = isError ? "#e74c3c" : "#2ecc71";
+        messageDiv.style.color = "#fff";
+        setTimeout(() => { messageDiv.style.display = "none"; }, 3000);
     }
 }

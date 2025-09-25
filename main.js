@@ -1,6 +1,6 @@
 import { Login } from "./login/Login.js";
-import { Register } from "./register/register.js";
-import { TaskManager } from "./taskManager/task-manager.js";
+import { Register } from "./register/Register.js";
+import { TaskManager } from "./taskManager/TaskManager.js";
 
 const profileContainer = document.getElementById("profileContainer");
 const taskContainer = document.getElementById("taskContainer");
@@ -8,16 +8,15 @@ const taskContainer = document.getElementById("taskContainer");
 const savedUserId = localStorage.getItem("userId");
 
 if (savedUserId) {
-    // Daha önce giriş yapıldıysa direkt TaskManager aç
+
+    window.taskManager = new TaskManager(taskContainer, profileContainer, savedUserId);
+     new Profile(profileContainer, savedUserId);
     new TaskManager(taskContainer, savedUserId);
-    // Profil bilgilerini de yüklemek için Login yerine Profile component eklenebilir
 } else {
-    // Önce register göster
     new Register(profileContainer, () => {
-        // Kayıt başarılıysa login göster
         new Login(profileContainer, (userId) => {
             localStorage.setItem("userId", userId);
-            new TaskManager(taskContainer, userId);
+            window.taskManager = new TaskManager(taskContainer, profileContainer, userId);
         });
     });
 }
