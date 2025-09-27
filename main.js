@@ -1,8 +1,7 @@
 import { Login } from "./login/Login.js";
-import { Register } from "./register/Register.js";
-import { TaskManager } from "./taskManager/TaskManager.js";
+import { TaskManager } from "./taskManager/taskManager.js"
 import { Profile } from "./profile/Profile.js";
-
+import { Register } from "./register/register.js";
 
 const profileContainer = document.getElementById("profileContainer");
 const taskContainer = document.getElementById("taskContainer");

@@ -55,7 +55,7 @@ export class Register {
         this.container.innerHTML = "";
         import("../login/Login.js").then(module => {
             new module.Login(this.container, (userId) => {
-                import("../taskManager/TaskManager.js").then(tmModule => {
+                import("../taskManager/taskManager.js").then(tmModule => {
                     window.taskManager = new tmModule.TaskManager(document.getElementById("taskContainer"), document.getElementById("profileContainer"), userId);
                 });
             });
