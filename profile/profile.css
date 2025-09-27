@@ -1,73 +1,131 @@
-/* Sol Profil Paneli */
+:root{
+  --accent: #1e3c72;
+  --muted: #6b7a91;
+  --field-bg: rgba(246,249,255,0.9);
+}
+
+/* Profil panel wrapper — bu container'ı #profileContainer içine koy */
 .profile-panel {
-    width: 280px;
-    background: #ffffffee;
-    padding: 25px;
-    border-radius: 16px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-    display: flex;
-    flex-direction: column;
-    gap: 18px;
+  width: 80%;
+  background: #ffffff;
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 8px 24px rgba(2,8,23,0.12);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-height: 180px;
+  height: 550px;
+  
 }
 
+/* Başlık */
 .profile-panel h2 {
-    color: #1e3c72;
-    font-size: 22px;
-    font-weight: 600;
-    text-align: center;
+  margin: 0;
+  font-size: 1rem;
+  color: var(--accent);
+  text-align: left;
+  font-weight: 600;
 }
 
+/* Her bir profile satırı — iki sütun: sol = etiket, sağ = değer */
 .profile-field {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 12px;
-    background: #f0f4ff;
-    border-radius: 10px;
-    transition: background 0.2s;
+  display: grid;
+  font-size: 0.8rem;
+  grid-template-columns: 36% 1fr;   /* etiket sabit/ dar, değer esnek */
+  gap: 12px;
+  align-items: center;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--field-bg);
+  transition: background .12s ease, transform .12s ease;
+  min-height: 48px;                /* satır yüksekliği sabit tutar */
 }
 
+/* Hover görsel hafif hareket */
 .profile-field:hover {
-    background: #e2ebff;
+  transform: translateY(-2px);
+  background: #eef4ff;
 }
 
-.profile-field span {
-    font-size: 15px;
-    color: #1e3c72;
-    cursor: pointer;
+/* Label (sol) */
+.profile-field span:first-child,
+.profile-field .label {
+  font-weight: 600;
+  color: var(--accent);
+  font-size: 0.8rem;
+  padding-left: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
+/* Value (sağ) — masaüstünde sağa dayalı, uzun metin kırılsın */
+.profile-field span:last-child,
+.profile-field .value,
+.profile-field .editable {
+  font-weight: 300;
+  color: #243042;
+  text-align: right;          /* sağda göster */
+  padding-right: 6px;
+  word-break: break-word;
+  cursor: pointer;            /* tıklanabilir görünmesi için */
+}
+
+/* Eğer JS render'in span yapısı farklıysa (ör. class="editable"), desteklemek için */
+.profile-field .editable { text-align: right; }
+
+/* inline-edit input: sadece alt çizgi görünecek (üst/yan çizgiler gizli) */
 .inline-edit {
-    width: 100%;
-    border: none;
-    border-bottom: 2px solid #1e3c72;
-    outline: none;
-    font-size: 15px;
-    background: transparent;
-    color: #1e3c72;
-    padding: 2px 0;
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid rgba(30,60,114,0.9);
+  background: transparent;
+  padding: 4px 6px;
+  font-size: 0.96rem;
+  color: #172033;
+  outline: none;
+  transition: border-color .12s ease, box-shadow .12s ease;
 }
 
+/* focus olduğunda alt çizgi vurgusu */
+.inline-edit:focus {
+  border-bottom-color: var(--accent);
+  box-shadow: 0 6px 18px rgba(30,60,114,0.06);
+}
+
+/* Email satırı (düzenlenemez) */
+.profile-field .email-value,
+#email {
+  cursor: default;
+  color: var(--muted);
+  font-style: normal;
+}
+
+/* logout butonu lokal */
 #logoutBtn {
-    margin-top: 20px;
-    padding: 10px 15px;
-    width: 100%;
-    background: #e74c3c;
-    color: #fff;
-    border: none;
-    border-radius: 12px;
-    font-size: 16px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: background 0.2s, transform 0.2s;
+  margin-top: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), #1b2f51);
+  color: white;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 8px 20px rgba(30,60,114,0.12);
 }
 
-#logoutBtn:hover {
-    background: #c0392b;
-    transform: translateY(-2px);
-}
-
-/* Responsive */
-@media screen and (max-width: 900px) {
-    .profile-panel { width: 100%; margin-bottom: 20px; }
+/* küçük ekranlarda: etiket üstte, değer altta (stack) */
+@media (max-width: 600px) {
+  .profile-field {
+    grid-template-columns: 1fr;
+    gap: 6px;
+    padding: 8px;
+  }
+  .profile-field span:last-child,
+  .profile-field .editable,
+  .inline-edit {
+    text-align: left;
+    padding-left: 6px;
+  }
+  .profile-panel { padding: 16px; gap: 8px; }
 }

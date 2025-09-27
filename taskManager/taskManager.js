@@ -1,5 +1,6 @@
 import { Profile } from "../profile/Profile.js";
 
+
 export class TaskManager {
     constructor(taskContainer, profileContainer, userId) {
         this.taskContainer = taskContainer;
@@ -13,7 +14,7 @@ export class TaskManager {
 
     renderTaskPanel() {
         this.taskContainer.innerHTML = `
-            <h2>My Tasks</h2>
+            <h4>My Tasks</h4>
             <div id="message"></div>
             <div class="form">
                 <input type="text" id="title" placeholder="Task Title">
@@ -40,13 +41,16 @@ export class TaskManager {
                 const li = document.createElement("li");
                 li.className = "task-item";
                 li.innerHTML = `
-                    <div>
-                        <h3>${task.title}</h3>
-                        <p>${task.description || ""}</p>
+                
+                    <div id="taskList">
+                    <div >
+                        <h5>${task.title}</h5>
+                        <p id="desc">${task.description || ""}</p>
                     </div>
                     <div>
-                        <button class="update-btn">✏️</button>
-                        <button class="delete-btn">🗑️</button>
+                        <button class="update-btn">update</button>
+                        <button class="delete-btn">delete</button>
+                    </div>
                     </div>
                 `;
 
