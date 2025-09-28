@@ -43,11 +43,11 @@ export class TaskManager {
                 li.innerHTML = `
                 
                     <div id="taskList">
-                    <div >
+                    <div id="task-inputs" >
                         <h5>${task.title}</h5>
                         <p id="desc">${task.description || ""}</p>
                     </div>
-                    <div>
+                    <div id="btns">
                         <button class="update-btn">update</button>
                         <button class="delete-btn">delete</button>
                     </div>
