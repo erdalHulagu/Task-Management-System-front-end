@@ -28,10 +28,13 @@ body {
 }
 
 #taskContainer {
-    width: 65%;
+    width: 75%;      /* sabit genişlik */
+  max-height: 600px;      /* sabit yükseklik */
+  overflow-y: scroll;       /* kaydırma olsun */
+  scrollbar-width: none;  
     background: #f5f6fa;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    padding: 20px;
+    padding: 40px;
     margin-left: 40px;
     margin-right: 20px;
     border-radius: 16px;
@@ -65,23 +68,47 @@ button:hover {
     background: #2a5298;
     transform: translateY(-2px);
 }
-#taskList{
-    width: 100%;
-  height: 100%;
+.task-item {
+  list-style: none;
+  margin: 10px 0;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #f9f9f9;
+}
+#taskList {
   display: flex;
-  
+  flex-direction: column; /* önce üstte input, altta butonlar */
+  gap: 10px;
 }
 
 #task-inputs {
-  flex: 1; /* solda daha fazla alan kaplasın */
- height: 10%;
+  flex: 1;
+}
+.task-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.empty-space {
+  flex: 0 0 85%;
 }
 
+
 #btns {
- 
-  align-items: end;
-  justify-content: end;
-  gap: 8px; /* butonlar arasında boşluk */
+  flex: 0 0 15%;
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+#btns button {
+  flex: 1;                 /* %15 alan içinde eşit bölünsün */
+  padding: 6px 10px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: 0.2s ease-in-out;
 }
 /* Task listesi */
 
@@ -91,7 +118,7 @@ ul {
     list-style: none;
     padding: 0;
     margin-top: 20px;
-    max-height: 400px;
+    max-height: 300px;
     overflow-y: auto;
     overflow-x: auto;
 }
@@ -121,7 +148,7 @@ ul {
 }
 
 .update-btn:hover {
-    background: #d68910;
+  background-color: #43a4e0;
 }
 
 .delete-btn {

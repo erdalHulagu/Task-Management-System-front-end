@@ -43,15 +43,18 @@ export class TaskManager {
                 li.innerHTML = `
                 
                     <div id="taskList">
-                    <div id="task-inputs" >
-                        <h5>${task.title}</h5>
-                        <p id="desc">${task.description || ""}</p>
-                    </div>
-                    <div id="btns">
-                        <button class="update-btn">update</button>
-                        <button class="delete-btn">delete</button>
-                    </div>
-                    </div>
+    <div id="task-inputs">
+      <h5>${task.title}</h5>
+      <p id="desc">${task.description || ""}</p>
+    </div>
+    <div class="task-bottom">
+      <div class="empty-space"></div>
+      <div id="btns">
+        <button class="update-btn">update</button>
+        <button class="delete-btn">delete</button>
+      </div>
+    </div>
+  </div>
                 `;
 
                 // Güncelleme butonuna tıklama
@@ -71,8 +74,8 @@ export class TaskManager {
 
                 list.appendChild(li);
             });
-        } catch (err) { 
-            this.showMessage("Görevler yüklenemedi!", true); 
+        } catch (err) {
+            this.showMessage("Görevler yüklenemedi!", true);
         }
     }
 
@@ -89,8 +92,8 @@ export class TaskManager {
                 document.getElementById("desc").value = "";
                 this.loadTasks();
             } else this.showMessage("Görev eklenemedi!", true);
-        } catch (err) { 
-            this.showMessage("Sunucuya bağlanılamadı!", true); 
+        } catch (err) {
+            this.showMessage("Sunucuya bağlanılamadı!", true);
         }
     }
 
@@ -122,12 +125,12 @@ export class TaskManager {
         }
     }
 
-    showMessage(msg, isError=false) {
+    showMessage(msg, isError = false) {
         const messageDiv = document.getElementById("message");
         messageDiv.textContent = msg;
         messageDiv.style.display = "block";
         messageDiv.style.background = isError ? "#e74c3c" : "#2ecc71";
         messageDiv.style.color = "#fff";
-        setTimeout(()=>{ messageDiv.style.display="none"; },3000);
+        setTimeout(() => { messageDiv.style.display = "none"; }, 3000);
     }
 }
