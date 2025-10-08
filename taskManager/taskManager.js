@@ -1,6 +1,5 @@
 import { Profile } from "../profile/Profile.js";
 
-
 export class TaskManager {
     constructor(taskContainer, profileContainer, userId) {
         this.taskContainer = taskContainer;
@@ -19,6 +18,7 @@ export class TaskManager {
             <div class="form">
                 <input type="text" id="title" placeholder="Task Title">
                 <input type="text" id="desc" placeholder="Task Description">
+                <input type="date" id="taskDate" placeholder="Task Date">
                 <button id="addBtn">Add Task</button>
             </div>
             <ul id="taskList"></ul>
@@ -41,20 +41,20 @@ export class TaskManager {
                 const li = document.createElement("li");
                 li.className = "task-item";
                 li.innerHTML = `
-                
                     <div id="taskList">
-    <div id="task-inputs">
-      <h5>${task.title}</h5>
-      <p id="desc">${task.description || ""}</p>
-    </div>
-    <div class="task-bottom">
-      <div class="empty-space"></div>
-      <div id="btns">
-        <button class="update-btn">update</button>
-        <button class="delete-btn">delete</button>
-      </div>
-    </div>
-  </div>
+                        <div id="task-inputs">
+                            <h5>${task.title}</h5>
+                            <p id="desc">${task.description || ""}</p>
+                            <p id="date">${task.date || ""}</p>
+                        </div>
+                        <div class="task-bottom">
+                            <div class="empty-space"></div>
+                            <div id="btns">
+                                <button class="update-btn">update</button>
+                                <button class="delete-btn">delete</button>
+                            </div>
+                        </div>
+                    </div>
                 `;
 
                 // Güncelleme butonuna tıklama
@@ -82,16 +82,24 @@ export class TaskManager {
     async addTask() {
         const title = document.getElementById("title").value.trim();
         const desc = document.getElementById("desc").value.trim();
-        if (!title) { this.showMessage("Title is mandatory!", true); return; }
+        const date = document.getElementById("taskDate").value;  // yeni tarih alanı
+
+        if (!title) { 
+            this.showMessage("Title is mandatory!", true); 
+            return; 
+        }
 
         try {
-            const res = await fetch(`http://localhost:8000/add?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(desc)}&userId=${this.userId}`);
+            const res = await fetch(`http://localhost:8000/add?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(desc)}&userId=${this.userId}&date=${encodeURIComponent(date)}`);
             if (res.ok) {
                 this.showMessage("Görev eklendi!");
                 document.getElementById("title").value = "";
                 document.getElementById("desc").value = "";
+                document.getElementById("taskDate").value = "";  // formu temizle
                 this.loadTasks();
-            } else this.showMessage("Görev eklenemedi!", true);
+            } else {
+                this.showMessage("Görev eklenemedi!", true);
+            }
         } catch (err) {
             this.showMessage("Sunucuya bağlanılamadı!", true);
         }
