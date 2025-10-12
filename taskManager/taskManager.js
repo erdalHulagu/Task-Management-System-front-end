@@ -37,24 +37,24 @@ export class TaskManager {
             const tasks = await res.json();
             const list = document.getElementById("taskList");
             list.innerHTML = "";
+
             tasks.forEach(task => {
                 const li = document.createElement("li");
                 li.className = "task-item";
                 li.innerHTML = `
-                    <div id="taskList">
-                        <div id="task-inputs">
+                    
+                        <div  id="task-inputs">
                             <h5>${task.title}</h5>
                             <p id="desc">${task.description || ""}</p>
-                            <p id="date">${task.date || ""}</p>
+                            <p id="date">${task.taskTime ? task.taskTime.substring(0,10) : ""}</p>
                         </div>
                         <div class="task-bottom">
-                            <div class="empty-space"></div>
                             <div id="btns">
                                 <button class="update-btn">update</button>
                                 <button class="delete-btn">delete</button>
                             </div>
                         </div>
-                    </div>
+                    
                 `;
 
                 // Güncelleme butonuna tıklama
@@ -90,7 +90,7 @@ export class TaskManager {
         }
 
         try {
-            const res = await fetch(`http://localhost:8000/add?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(desc)}&userId=${this.userId}&date=${encodeURIComponent(date)}`);
+            const res = await fetch(`http://localhost:8000/add?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(desc)}&userId=${this.userId}&taskTime=${encodeURIComponent(date)}`);
             if (res.ok) {
                 this.showMessage("Görev eklendi!");
                 document.getElementById("title").value = "";

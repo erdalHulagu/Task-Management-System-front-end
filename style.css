@@ -1,3 +1,5 @@
+/* =========================== */
+/* 🌐 Genel Body & Layout */
 body {
     margin: 0;
     padding: 0;
@@ -12,8 +14,8 @@ body {
 #mainLayout {
     display: flex;
     width: 100%;
-    height: 90vh;        /* ekranın çoğu yüksekliğini kaplasın */
-    padding: 0 10%;      /* sağ ve sol boşluk */
+    height: 90vh;
+    padding: 0 10%;
     box-sizing: border-box;
 }
 
@@ -24,24 +26,23 @@ body {
     padding: 20px;
     border-radius: 16px;
     overflow-y: auto;
-    
 }
 
 #taskContainer {
-    width: 75%;      /* sabit genişlik */
-  max-height: 600px;      /* sabit yükseklik */
-  overflow-y: scroll;       /* kaydırma olsun */
-  scrollbar-width: none;  
+    width: 75%;
+    max-height: 600px;
+    overflow-y: scroll;
+    scrollbar-width: none;
     background: #f5f6fa;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
     padding: 40px;
     margin-left: 40px;
     margin-right: 20px;
     border-radius: 16px;
-    overflow-y: auto;
 }
 
-/* Form ve input/button stilleri */
+/* =========================== */
+/* 📝 Form & Input / Button */
 input {
     width: 90%;
     padding: 10px;
@@ -50,6 +51,7 @@ input {
     border-radius: 8px;
     outline: none;
 }
+
 input:focus {
     border-color: #1e3c72;
     box-shadow: 0 0 5px rgba(30,60,114,0.5);
@@ -68,53 +70,18 @@ button:hover {
     background: #2a5298;
     transform: translateY(-2px);
 }
-.task-item {
-  list-style: none;
-  margin: 10px 0;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  background: #f9f9f9;
-}
+
+/* =========================== */
+/* 🗂 Task Listesi */
 #taskList {
   display: flex;
-  flex-direction: column; /* önce üstte input, altta butonlar */
+  flex-direction: column;
   gap: 10px;
 }
 
-#task-inputs {
-  flex: 1;
-}
-.task-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.empty-space {
-  flex: 0 0 85%;
-}
-
-
-#btns {
-  flex: 0 0 15%;
-  display: flex;
-  gap: 8px;
-  justify-content: flex-end;
-}
-#btns button {
-  flex: 1;                 /* %15 alan içinde eşit bölünsün */
-  padding: 6px 10px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 14px;
-  transition: 0.2s ease-in-out;
-}
-/* Task listesi */
-
 ul {
     width: 100%;
-  height: 100%;
+    height: 100%;
     list-style: none;
     padding: 0;
     margin-top: 20px;
@@ -123,45 +90,102 @@ ul {
     overflow-x: auto;
 }
 
+/* =========================== */
+/* 🌟 Task Item Modern Stil */
 .task-item {
-    background: #fff;
-    margin: 10px 0;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-#desc{
-    font-size: 12px;
-    color: #142a53;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 18px 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
+.task-item:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+/* Sol taraf: Başlık, Açıklama, Tarih */
+#task-inputs {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+#task-inputs h5 {
+  font-size: 18px;
+  color: #1e3c72;
+  margin: 0;
+}
+
+#desc {
+  font-size: 14px;
+  color: #34495e;
+  margin: 0;
+}
+
+#date {
+  font-size: 13px;
+  color: #2a5298;
+  margin-top: 4px;
+}
+
+/* Sağ taraf: Butonlar alt alta */
+#btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 8px;
+}
+
+#btns button {
+  width: 80px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  border: none;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
 
 .update-btn {
-    background: #f39c12;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 14px;
-    margin-right: 5px;
+  background: #3498db;
+  color: #fff;
 }
 
 .update-btn:hover {
-  background-color: #43a4e0;
+  background: #2980b9;
 }
 
 .delete-btn {
-    background: #e74c3c;
-    padding: 8px 12px;
-    border-radius: 6px;
-    font-size: 14px;
+  background: #e74c3c;
+  color: #fff;
 }
 
 .delete-btn:hover {
-    background: #c0392b;
+  background: #c0392b;
 }
 
+/* =========================== */
+/* ⚡ Task Bottom / Spacer */
+.task-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.empty-space {
+  flex: 0 0 85%;
+}
+
+/* =========================== */
+/* 💬 Mesaj div */
 #message {
     margin-top: 15px;
     padding: 10px;
