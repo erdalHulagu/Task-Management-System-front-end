@@ -1,195 +1,217 @@
-/* =========================== */
-/* 🌐 Genel Body & Layout */
 body {
-    margin: 0;
-    padding: 0;
-    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
-    background: linear-gradient(135deg, #1e3c72, #2a5298);
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  margin: 0;
+  padding: 0;
+  font-family: "Poppins", "Segoe UI", sans-serif;
+  background: linear-gradient(135deg, #1e3c72, #2a5298);
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #mainLayout {
-    display: flex;
-    width: 100%;
-    height: 90vh;
-    padding: 0 10%;
-    box-sizing: border-box;
+  display: flex;
+  width: 95%;
+  height: 95vh;
+  
+  box-sizing: border-box;
+  gap: 30px;
 }
 
 #profileContainer {
-    width: 25%;
-    background: #fff;
-    box-shadow: 2px 0 5px rgba(0,0,0,0.1);
-    padding: 20px;
-    border-radius: 16px;
-    overflow-y: auto;
+  width: 25%;
+  background: #fff;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 16px;
+  overflow-y: auto;
 }
 
 #taskContainer {
-    width: 75%;
-    max-height: 600px;
-    overflow-y: scroll;
-    scrollbar-width: none;
-    background: #f5f6fa;
-    box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    padding: 40px;
-    margin-left: 40px;
-    margin-right: 20px;
-    border-radius: 16px;
+  flex: 1;
+  background: #f9fafc;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  border-radius: 20px;
+  overflow-y: auto;
 }
 
-/* =========================== */
-/* 📝 Form & Input / Button */
+.panel-title {
+  position: sticky;
+    top: 0;
+     z-index: 10;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e3c72;
+  text-align: center;
+  margin-bottom: 6px;
+
+}
+
+.form {
+   position: sticky;
+    top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: #ffffff;
+  padding: 10px;
+  border-radius: 14px;
+    z-index: 10;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  
+}
+
 input {
-    width: 90%;
-    padding: 10px;
-    margin: 8px 0;
-    border: 1px solid #dcdde1;
-    border-radius: 8px;
-    outline: none;
+  width: 90%;
+  padding: 6px;
+  margin: 8px 0;
+  border: 1px solid #dcdde1;
+  border-radius: 8px;
+  outline: none;
+  transition: 0.2s;
 }
 
 input:focus {
-    border-color: #1e3c72;
-    box-shadow: 0 0 5px rgba(30,60,114,0.5);
+  border-color: #2a5298;
+  box-shadow: 0 0 6px rgba(42, 82, 152, 0.4);
 }
 
-button {
-    padding: 10px 18px;
-    margin-top: 10px;
-    background: #1e3c72;
-    color: #fff;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-}
-button:hover {
-    background: #2a5298;
-    transform: translateY(-2px);
+.add-btn {
+  background: #1e3c72;
+  color: white;
+  padding: 6px 10px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 5px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: 0.3s;
 }
 
-/* =========================== */
-/* 🗂 Task Listesi */
-#taskList {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+.add-btn:hover {
+  background: #2a5298;
+  transform: translateY(-2px);
 }
 
-ul {
-    width: 100%;
-    height: 100%;
-    list-style: none;
-    padding: 0;
-    margin-top: 20px;
-    max-height: 300px;
-    overflow-y: auto;
-    overflow-x: auto;
-}
-
-/* =========================== */
-/* 🌟 Task Item Modern Stil */
 .task-item {
+  background: #fff;
+  border-radius: 14px;
+  padding: 18px 20px;
+  margin: 12px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.25s ease;
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  background: #ffffff;
-  border-radius: 12px;
-  padding: 18px 20px;
-  margin-bottom: 15px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
 }
 
 .task-item:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
-}
-
-/* Sol taraf: Başlık, Açıklama, Tarih */
-#task-inputs {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
 #task-inputs h5 {
-  font-size: 18px;
+  margin: 0;
   color: #1e3c72;
-  margin: 0;
+  font-size: 16px;
 }
-
 #desc {
-  font-size: 14px;
-  color: #34495e;
-  margin: 0;
-}
-
-#date {
+  margin: 4px 0;
+  color: #333;
   font-size: 13px;
-  color: #2a5298;
-  margin-top: 4px;
+}
+.date-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 90%;
+  margin: 5px 0;
+  justify-content: space-between;
+}
+.hidden-date {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+.date-icon {
+  font-size: 22px;
+  color: #1e3c72;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+  background: #eef0f6;
+  border-radius: 8px;
+  padding: 5px;
+  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15); 🔹 Hafif gölge */
 }
 
-/* Sağ taraf: Butonlar alt alta */
+.date-icon:hover {
+  transform: scale(1.2);
+  color: #2a5298;
+}
+
+
 #btns {
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   gap: 8px;
 }
 
-#btns button {
-  width: 80px;
+.update-btn, .delete-btn {
+  width: 60px;
   padding: 6px 10px;
   border-radius: 6px;
-  cursor: pointer;
-  border: none;
   font-size: 13px;
   font-weight: 500;
-  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s;
 }
 
 .update-btn {
-  background: #3498db;
+  background: #213174;
   color: #fff;
 }
 
 .update-btn:hover {
-  background: #2980b9;
+  background: #115a8a;
 }
 
 .delete-btn {
-  background: #e74c3c;
+  background: #d84343;
   color: #fff;
 }
 
 .delete-btn:hover {
-  background: #c0392b;
+  background: #b12f2f;
 }
 
-/* =========================== */
-/* ⚡ Task Bottom / Spacer */
-.task-bottom {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.empty-space {
-  flex: 0 0 85%;
-}
-
-/* =========================== */
-/* 💬 Mesaj div */
 #message {
-    margin-top: 15px;
-    padding: 10px;
-    border-radius: 8px;
-    font-weight: bold;
-    display: none;
+  margin-top: 15px;
+  padding: 10px;
+  border-radius: 8px;
+  font-weight: bold;
+  display: none;
+  text-align: center;
+  transition: all 0.4s ease;
+}
+
+.fade-in {
+  animation: fadeIn 0.3s forwards;
+}
+
+.fade-out {
+  animation: fadeOut 0.3s forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-5px); }
 }

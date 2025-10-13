@@ -11,21 +11,31 @@ export class TaskManager {
         this.loadTasks();
     }
 
-    renderTaskPanel() {
-        this.taskContainer.innerHTML = `
-            <h4>My Tasks</h4>
-            <div id="message"></div>
-            <div class="form">
-                <input type="text" id="title" placeholder="Task Title">
-                <input type="text" id="desc" placeholder="Task Description">
-                <input type="date" id="taskDate" placeholder="Task Date">
-                <button id="addBtn">Add Task</button>
+   renderTaskPanel() {
+    this.taskContainer.innerHTML = `
+        
+        <div id="message"></div>
+        
+        <div class="form">
+        <h4 class="panel-title">🗂️ My Tasks</h4>
+            <input type="text" id="title" placeholder="Task Title">
+            <input type="text" id="desc" placeholder="Task Description">
+            <div class="date-wrapper">
+                <input type="date" id="taskDate" class="hidden-date">
+                <span class="date-icon" id="dateIcon">🗓️</span>
             </div>
-            <ul id="taskList"></ul>
-        `;
+            <button id="addBtn" class="add-btn">➕ Add Task</button>
+        </div>
+        <ul id="taskList"></ul>
+    `;
 
-        document.getElementById("addBtn").addEventListener("click", () => this.addTask());
-    }
+    document.getElementById("addBtn").addEventListener("click", () => this.addTask());
+
+    // 📅 ikonuna tıklayınca date picker açılır
+    const dateInput = document.getElementById("taskDate");
+    const dateIcon = document.getElementById("dateIcon");
+    dateIcon.addEventListener("click", () => dateInput.showPicker());
+}
 
     async loadProfile() {
         this.profile = new Profile(this.profileContainer, this.userId);
@@ -42,30 +52,26 @@ export class TaskManager {
                 const li = document.createElement("li");
                 li.className = "task-item";
                 li.innerHTML = `
-                    
-                        <div  id="task-inputs">
-                            <h5>${task.title}</h5>
-                            <p id="desc">${task.description || ""}</p>
-                            <p id="date">${task.taskTime ? task.taskTime.substring(0,10) : ""}</p>
+                    <div id="task-inputs">
+                        <h5>${task.title}</h5>
+                        <p id="desc">${task.description || ""}</p>
+                        <p id="date">${task.taskTime ? task.taskTime.substring(0,10) : ""}</p>
+                    </div>
+                    <div class="task-bottom">
+                        <div id="btns">
+                            <button class="update-btn">✏️ </button>
+                            <button class="delete-btn">🗑️ </button>
                         </div>
-                        <div class="task-bottom">
-                            <div id="btns">
-                                <button class="update-btn">update</button>
-                                <button class="delete-btn">delete</button>
-                            </div>
-                        </div>
-                    
+                    </div>
                 `;
 
-                // Güncelleme butonuna tıklama
                 li.querySelector(".update-btn").addEventListener("click", () => {
                     const newTitle = prompt("Yeni başlık:", task.title);
                     if (newTitle && newTitle.trim() !== "") {
-                        this.updateTask(task.id, newTitle.trim());
+                        this.updateTask(task.id, task);
                     }
                 });
 
-                // Silme butonuna tıklama
                 li.querySelector(".delete-btn").addEventListener("click", () => {
                     if (confirm("Bu görevi silmek istediğine emin misin?")) {
                         this.deleteTask(task.id);
@@ -82,20 +88,21 @@ export class TaskManager {
     async addTask() {
         const title = document.getElementById("title").value.trim();
         const desc = document.getElementById("desc").value.trim();
-        const date = document.getElementById("taskDate").value;  // yeni tarih alanı
+        const date = document.getElementById("taskDate").value;
 
-        if (!title) { 
-            this.showMessage("Title is mandatory!", true); 
-            return; 
+        if (!title) {
+            this.showMessage("Title is mandatory!", true);
+            return;
         }
 
         try {
             const res = await fetch(`http://localhost:8000/add?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(desc)}&userId=${this.userId}&taskTime=${encodeURIComponent(date)}`);
             if (res.ok) {
                 this.showMessage("Görev eklendi!");
-                document.getElementById("title").value = "";
-                document.getElementById("desc").value = "";
-                document.getElementById("taskDate").value = "";  // formu temizle
+                document.querySelectorAll("#title, #desc, #taskDate").forEach(el => {
+                    el.classList.add("fade-out");
+                    setTimeout(() => { el.value = ""; el.classList.remove("fade-out"); }, 300);
+                });
                 this.loadTasks();
             } else {
                 this.showMessage("Görev eklenemedi!", true);
@@ -119,9 +126,18 @@ export class TaskManager {
         }
     }
 
-    async updateTask(id, newTitle) {
+    async updateTask(id, oldTask) {
         try {
-            const res = await fetch(`http://localhost:8000/update?id=${id}&title=${encodeURIComponent(newTitle)}&userId=${this.userId}`);
+            const newTitle = prompt("Yeni başlık:", oldTask.title);
+            if (!newTitle || newTitle.trim() === "") return;
+
+            const newDesc = prompt("Yeni açıklama:", oldTask.description || "");
+            const newDate = prompt("Yeni tarih (yyyy-MM-dd):", oldTask.taskTime || "");
+
+            const res = await fetch(
+                `http://localhost:8000/update?id=${id}&title=${encodeURIComponent(newTitle)}&desc=${encodeURIComponent(newDesc)}&taskTime=${encodeURIComponent(newDate)}&userId=${this.userId}`
+            );
+
             if (res.ok) {
                 this.showMessage("Görev güncellendi!");
                 this.loadTasks();
@@ -137,8 +153,14 @@ export class TaskManager {
         const messageDiv = document.getElementById("message");
         messageDiv.textContent = msg;
         messageDiv.style.display = "block";
+        messageDiv.style.opacity = "1";
         messageDiv.style.background = isError ? "#e74c3c" : "#2ecc71";
         messageDiv.style.color = "#fff";
-        setTimeout(() => { messageDiv.style.display = "none"; }, 3000);
+        messageDiv.classList.add("fade-in");
+        setTimeout(() => {
+            messageDiv.classList.remove("fade-in");
+            messageDiv.classList.add("fade-out");
+            setTimeout(() => { messageDiv.style.display = "none"; messageDiv.classList.remove("fade-out"); }, 600);
+        }, 2500);
     }
 }
