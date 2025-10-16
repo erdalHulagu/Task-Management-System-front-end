@@ -85,32 +85,40 @@ export class TaskManager {
         }
     }
 
-    async addTask() {
-        const title = document.getElementById("title").value.trim();
-        const desc = document.getElementById("desc").value.trim();
-        const date = document.getElementById("taskDate").value;
+   async addTask() {
+    const title = document.getElementById("title").value.trim();
+    const desc = document.getElementById("desc").value.trim();
+    const date = document.getElementById("taskDate").value;
 
-        if (!title) {
-            this.showMessage("Title is mandatory!", true);
-            return;
-        }
-
-        try {
-            const res = await fetch(`http://localhost:8000/add?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(desc)}&userId=${this.userId}&taskTime=${encodeURIComponent(date)}`);
-            if (res.ok) {
-                this.showMessage("Görev eklendi!");
-                document.querySelectorAll("#title, #desc, #taskDate").forEach(el => {
-                    el.classList.add("fade-out");
-                    setTimeout(() => { el.value = ""; el.classList.remove("fade-out"); }, 300);
-                });
-                this.loadTasks();
-            } else {
-                this.showMessage("Görev eklenemedi!", true);
-            }
-        } catch (err) {
-            this.showMessage("Sunucuya bağlanılamadı!", true);
-        }
+    if (!title) {
+        this.showMessage("Title is mandatory!", true);
+        return;
     }
+
+    if (!date) {
+        this.showMessage("Please select a date for reminder!", true);
+        return;
+    }
+
+    try {
+        const res = await fetch(
+            `http://localhost:8000/add?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(desc)}&userId=${this.userId}&taskTime=${encodeURIComponent(date)}`
+        );
+
+        if (res.ok) {
+            this.showMessage("✅ Task added! Reminder email will be sent on the selected date.");
+            document.querySelectorAll("#title, #desc, #taskDate").forEach(el => {
+                el.classList.add("fade-out");
+                setTimeout(() => { el.value = ""; el.classList.remove("fade-out"); }, 300);
+            });
+            this.loadTasks();
+        } else {
+            this.showMessage("Failed to add task!", true);
+        }
+    } catch (err) {
+        this.showMessage("Cannot connect to the server!", true);
+    }
+}
 
     async deleteTask(id) {
         try {
