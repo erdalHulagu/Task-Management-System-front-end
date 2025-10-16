@@ -1,5 +1,10 @@
 import { Profile } from "../profile/Profile.js";
 
+function isReminderActive(dateString) {
+    if (!dateString) return false;
+    const today = new Date().toISOString().slice(0, 10);
+    return dateString.startsWith(today);
+}
 export class TaskManager {
     constructor(taskContainer, profileContainer, userId) {
         this.taskContainer = taskContainer;
@@ -11,8 +16,8 @@ export class TaskManager {
         this.loadTasks();
     }
 
-   renderTaskPanel() {
-    this.taskContainer.innerHTML = `
+    renderTaskPanel() {
+        this.taskContainer.innerHTML = `
         
         <div id="message"></div>
         
@@ -29,96 +34,106 @@ export class TaskManager {
         <ul id="taskList"></ul>
     `;
 
-    document.getElementById("addBtn").addEventListener("click", () => this.addTask());
+        document.getElementById("addBtn").addEventListener("click", () => this.addTask());
 
-    // 📅 ikonuna tıklayınca date picker açılır
-    const dateInput = document.getElementById("taskDate");
-    const dateIcon = document.getElementById("dateIcon");
-    dateIcon.addEventListener("click", () => dateInput.showPicker());
-}
+        
+        const dateInput = document.getElementById("taskDate");
+        const dateIcon = document.getElementById("dateIcon");
+        dateIcon.addEventListener("click", () => dateInput.showPicker());
+    }
 
     async loadProfile() {
         this.profile = new Profile(this.profileContainer, this.userId);
     }
 
     async loadTasks() {
+        
         try {
             const res = await fetch(`http://localhost:8000/tasks?userId=${this.userId}`);
             const tasks = await res.json();
             const list = document.getElementById("taskList");
             list.innerHTML = "";
 
-            tasks.forEach(task => {
-                const li = document.createElement("li");
-                li.className = "task-item";
-                li.innerHTML = `
-                    <div id="task-inputs">
-                        <h5>${task.title}</h5>
-                        <p id="desc">${task.description || ""}</p>
-                        <p id="date">${task.taskTime ? task.taskTime.substring(0,10) : ""}</p>
-                    </div>
-                    <div class="task-bottom">
-                        <div id="btns">
-                            <button class="update-btn">✏️ </button>
-                            <button class="delete-btn">🗑️ </button>
-                        </div>
-                    </div>
-                `;
+           tasks.forEach(task => {
+    const li = document.createElement("li");
+    li.className = "task-item";
 
-                li.querySelector(".update-btn").addEventListener("click", () => {
-                    const newTitle = prompt("Yeni başlık:", task.title);
-                    if (newTitle && newTitle.trim() !== "") {
-                        this.updateTask(task.id, task);
-                    }
-                });
+    li.innerHTML = `
+        <div id="task-inputs">
+            <h5>${task.title}</h5>
+            <p id="desc">${task.description || ""}</p>
+            <p id="date">📅 ${task.taskTime ? task.taskTime.substring(0, 10) : ""}</p>
+        </div>
 
-                li.querySelector(".delete-btn").addEventListener("click", () => {
-                    if (confirm("Bu görevi silmek istediğine emin misin?")) {
-                        this.deleteTask(task.id);
-                    }
-                });
+        <div class="task-bottom">
+            <div id="btns">
+                <button class="update-btn">✏️</button>
+                <button class="delete-btn">🗑️</button>
+            </div>
+        </div>
 
-                list.appendChild(li);
-            });
+        ${isReminderActive(task.taskTime) ? `
+            <div class="reminder-card">
+                <span>📧 Reminder Active</span>
+            </div>
+        ` : ""}
+    `;
+    
+    li.querySelector(".update-btn").addEventListener("click", () => {
+        const newTitle = prompt("Yeni başlık:", task.title);
+        if (newTitle && newTitle.trim() !== "") {
+            this.updateTask(task.id, task);
+        }
+    });
+
+    li.querySelector(".delete-btn").addEventListener("click", () => {
+        if (confirm("Bu görevi silmek istediğine emin misin?")) {
+            this.deleteTask(task.id);
+        }
+    });
+
+    list.appendChild(li);
+});
+
         } catch (err) {
             this.showMessage("Görevler yüklenemedi!", true);
         }
     }
 
-   async addTask() {
-    const title = document.getElementById("title").value.trim();
-    const desc = document.getElementById("desc").value.trim();
-    const date = document.getElementById("taskDate").value;
+    async addTask() {
+        const title = document.getElementById("title").value.trim();
+        const desc = document.getElementById("desc").value.trim();
+        const date = document.getElementById("taskDate").value;
 
-    if (!title) {
-        this.showMessage("Title is mandatory!", true);
-        return;
-    }
-
-    if (!date) {
-        this.showMessage("Please select a date for reminder!", true);
-        return;
-    }
-
-    try {
-        const res = await fetch(
-            `http://localhost:8000/add?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(desc)}&userId=${this.userId}&taskTime=${encodeURIComponent(date)}`
-        );
-
-        if (res.ok) {
-            this.showMessage("✅ Task added! Reminder email will be sent on the selected date.");
-            document.querySelectorAll("#title, #desc, #taskDate").forEach(el => {
-                el.classList.add("fade-out");
-                setTimeout(() => { el.value = ""; el.classList.remove("fade-out"); }, 300);
-            });
-            this.loadTasks();
-        } else {
-            this.showMessage("Failed to add task!", true);
+        if (!title) {
+            this.showMessage("Title is mandatory!", true);
+            return;
         }
-    } catch (err) {
-        this.showMessage("Cannot connect to the server!", true);
+
+        if (!date) {
+            this.showMessage("Please select a date for reminder!", true);
+            return;
+        }
+
+        try {
+            const res = await fetch(
+                `http://localhost:8000/add?title=${encodeURIComponent(title)}&desc=${encodeURIComponent(desc)}&userId=${this.userId}&taskTime=${encodeURIComponent(date)}`
+            );
+
+            if (res.ok) {
+                this.showMessage(" Task added! Reminder email will be sent on the selected date.");
+                document.querySelectorAll("#title, #desc, #taskDate").forEach(el => {
+                    el.classList.add("fade-out");
+                    setTimeout(() => { el.value = ""; el.classList.remove("fade-out"); }, 300);
+                });
+                this.loadTasks();
+            } else {
+                this.showMessage("Failed to add task!", true);
+            }
+        } catch (err) {
+            this.showMessage("Cannot connect to the server!", true);
+        }
     }
-}
 
     async deleteTask(id) {
         try {
@@ -171,4 +186,5 @@ export class TaskManager {
             setTimeout(() => { messageDiv.style.display = "none"; messageDiv.classList.remove("fade-out"); }, 600);
         }, 2500);
     }
+    
 }
