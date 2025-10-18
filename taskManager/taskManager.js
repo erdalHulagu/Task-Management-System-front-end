@@ -62,7 +62,7 @@ export class TaskManager {
         <div id="task-inputs">
             <h5>${task.title}</h5>
             <p id="desc">${task.description || ""}</p>
-            <p id="date">📅 ${task.taskTime ? task.taskTime.substring(0, 10) : ""}</p>
+            <p id="date" style="background:none; border:none; color:#1e3c72; cursor:pointer">📅 ${task.taskTime ? task.taskTime.substring(0, 10) : ""}</p>
         </div>
 
         <div class="task-bottom">

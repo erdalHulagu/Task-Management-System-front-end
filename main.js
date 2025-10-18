@@ -3,6 +3,7 @@ import { TaskManager } from "./taskManager/taskManager.js"
 import { Profile } from "./profile/Profile.js";
 import { Register } from "./register/Register.js";
 
+
 const profileContainer = document.getElementById("profileContainer");
 const taskContainer = document.getElementById("taskContainer");
 

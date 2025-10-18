@@ -1,3 +1,4 @@
+@import url('./profile/profile.css');
 body {
   margin: 0;
   padding: 0;
@@ -8,7 +9,29 @@ body {
   justify-content: center;
   align-items: center;
 }
-
+#loginBtn{
+   margin-top: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), #1b2f51);
+  color: white;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 8px 20px rgba(30,60,114,0.12);
+  cursor: pointer;
+  
+}
+#sendCodeBtn{
+ margin-top: 8px;
+  padding: 10px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--accent), #1b2f51);
+  color: white;
+  font-weight: 600;
+  border: none;
+  box-shadow: 0 8px 20px rgba(30,60,114,0.12);
+  cursor: pointer;
+  }
 #mainLayout {
   display: flex;
   width: 95%;

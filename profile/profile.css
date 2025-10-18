@@ -112,6 +112,7 @@
   font-weight: 600;
   border: none;
   box-shadow: 0 8px 20px rgba(30,60,114,0.12);
+  cursor: pointer;
 }
 
 /* küçük ekranlarda: etiket üstte, değer altta (stack) */
