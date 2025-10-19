@@ -22,14 +22,14 @@ export class TaskManager {
         <div id="message"></div>
         
         <div class="form">
-        <h4 class="panel-title">🗂️ My Tasks</h4>
+        <h4 class="panel-title">🗂️My Daily Remainder</h4>
             <input type="text" id="title" placeholder="Task Title">
             <input type="text" id="desc" placeholder="Task Description">
             <div class="date-wrapper">
                 <input type="date" id="taskDate" class="hidden-date">
                 <span class="date-icon" id="dateIcon">🗓️</span>
             </div>
-            <button id="addBtn" class="add-btn">➕ Add Task</button>
+            <button id="addBtn" class="add-btn"> + Add Task</button>
         </div>
         <ul id="taskList"></ul>
     `;
@@ -62,9 +62,13 @@ export class TaskManager {
         <div id="task-inputs">
             <h5>${task.title}</h5>
             <p id="desc">${task.description || ""}</p>
-            <p id="date" style="background:none; border:none; color:#1e3c72; cursor:pointer">📅 ${task.taskTime ? task.taskTime.substring(0, 10) : ""}</p>
+            <p id="date" style="background:none; border:none; color:#1e3c72">🗓️ ${task.taskTime ? task.taskTime.substring(0, 10) : ""}</p>
         </div>
-
+ ${isReminderActive(task.taskTime) ? `
+            <div class="reminder-card">
+                <span>📧 Reminder Active</span>
+            </div>
+        ` : ""}
         <div class="task-bottom">
             <div id="btns">
                 <button class="update-btn">✏️</button>
@@ -72,11 +76,7 @@ export class TaskManager {
             </div>
         </div>
 
-        ${isReminderActive(task.taskTime) ? `
-            <div class="reminder-card">
-                <span>📧 Reminder Active</span>
-            </div>
-        ` : ""}
+       
     `;
     
     li.querySelector(".update-btn").addEventListener("click", () => {

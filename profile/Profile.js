@@ -9,34 +9,44 @@ export class Profile {
     render() {
         this.container.innerHTML = `
             <div class="profile-panel">
-                <h2>Profil Bilgileri</h2>
+                <h2>Profil</h2>
                 <div class="profile-field">
-                    <span>Ad Soyad:</span>
+                    <span>Full Name:</span>
                     <span class="editable" id="fullName">Yükleniyor...</span>
                 </div>
                 <div class="profile-field">
-                    <span>Telefon:</span>
+                    <span>Phone:</span>
                     <span class="editable" id="phone">Yükleniyor...</span>
                 </div>
                 <div class="profile-field">
-                    <span>Cinsiyet:</span>
+                    <span>Gender:</span>
                     <span class="editable" id="gender">Yükleniyor...</span>
                 </div>
                 <div class="profile-field">
-                    <span>Adres:</span>
+                    <span>Address:</span>
                     <span class="editable" id="address">Yükleniyor...</span>
                 </div>
                 <div class="profile-field">
                     <span>Email:</span>
                     <span id="email">Yükleniyor...</span>
                 </div>
-                <button id="logoutBtn">Çıkış Yap</button>
+
+                <div style="margin-top: 20px; display:flex; gap:10px;">
+                    <button id="logoutBtn" style="flex:1; background:#1e3c72; color:white; padding:8px; border-radius:6px; border:none; cursor:pointer;">Exit Profile</button>
+                    <button id="deleteAccountBtn" style="flex:1; background:#d32f2f; color:white; padding:8px; border-radius:6px; border:none; cursor:pointer;">Delete Account</button>
+                </div>
+
+                <div id="message" style="margin-top:10px; color:red;"></div>
             </div>
         `;
 
         document.getElementById("logoutBtn").addEventListener("click", () => {
             localStorage.removeItem("userId");
             window.location.reload();
+        });
+
+        document.getElementById("deleteAccountBtn").addEventListener("click", () => {
+            this.deleteAccount();
         });
     }
 
@@ -92,4 +102,30 @@ export class Profile {
             if (e.key === "Enter") input.blur();
         });
     }
+async deleteAccount() {
+    const confirmDelete = confirm("Are you sure you want to delete your account? This action cannot be undone!");
+    if (!confirmDelete) return;
+
+    try {
+       const res = await fetch(`http://localhost:8000/deleteUser?id=${this.userId}`, {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" }
+});
+
+       
+
+        if (res.ok) {
+            alert("Your account has been deleted successfully.");
+            localStorage.removeItem("userId");
+            window.location.reload();
+        } else {
+            const msg = await res.text();
+            alert("Failed to delete account: " + msg);
+        }
+    } catch (err) {
+        console.error(err);
+        alert("Server connection failed!");
+    }
+}
+
 }

@@ -1,4 +1,5 @@
 @import url('./profile/profile.css');
+@import url('./register/register.css');
 body {
   margin: 0;
   padding: 0;

@@ -7,23 +7,42 @@ export class Register {
         this.renderStep1();
     }
 
-    renderStep1() {
-        this.container.innerHTML = `
-            <h1>Kayıt Ol</h1>
-            <input type="text" id="fullName" placeholder="Ad Soyad">
-            <input type="text" id="phone" placeholder="Telefon">
-            <input type="text" id="gender" placeholder="Cinsiyet">
-            <input type="text" id="address" placeholder="Adres">
-            <input type="email" id="email" placeholder="Email">
-            <input type="password" id="password" placeholder="Şifre">
-            <button id="sendCodeBtn">Doğrulama Kodu Gönder</button>
-            <div style="margin-top: 10px;">
-                <button id="toLoginBtn" style="background:none; border:none; color:#1e3c72; cursor:pointer;">
-                    Zaten hesabım var? Giriş Yap
-                </button>
+   renderStep1() {
+    this.container.innerHTML = `
+        <h1>Register</h1>
+        <input type="text" id="fullName" placeholder="Full Name">
+        <input type="text" id="phone" placeholder="Phone">
+
+        <input type="text" id="address" placeholder="Address">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+<div class="gender-group">
+            <label>Gender</label>
+            <div class="gender-options">
+                <label>
+                    <input type="radio" name="gender" value="Mr">
+                    <span>Mr</span>
+                </label>
+                <label>
+                    <input type="radio" name="gender" value="Ms">
+                    <span>Ms</span>
+                </label>
             </div>
-            <div id="message"></div>
-        `;
+        </div>
+        <button id="sendCodeBtn">Send Verification Code</button>
+
+        <div style="margin-top: 10px;">
+            <button id="toLoginBtn" style="background:none; border:none; color:#1e3c72; cursor:pointer;">
+                Already have an account? Sign in
+            </button>
+        </div>
+
+        <div id="message"></div>
+    `;
+
+    // Eski 'gender' input'unu kaldırdık, onun yerine radio seçimi var
+
+
 
         document.getElementById("sendCodeBtn").addEventListener("click", () => this.sendVerificationCode());
         document.getElementById("toLoginBtn").addEventListener("click", () => this.goToLogin());

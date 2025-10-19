@@ -7,13 +7,13 @@ export class Login {
 
     render() {
         this.container.innerHTML = `
-            <h1>Giriş Yap</h1>
+            <h1>Sign-in</h1>
             <input type="email" id="email" placeholder="Email">
-            <input type="password" id="password" placeholder="Şifre">
-            <button id="loginBtn">Giriş Yap</button>
+            <input type="password" id="password" placeholder="Password">
+            <button id="loginBtn">sign in</button>
             <div style="margin-top: 10px;">
                 <button id="toRegisterBtn" style="background:none; border:none; color:#1e3c72; cursor:pointer;">
-                    Hesabın yok mu? Kayıt Ol
+                    Don't you have an account? Get registered
                 </button>
             </div>
             <div id="message"></div>
