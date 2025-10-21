@@ -23,22 +23,34 @@ export class Login {
         document.getElementById("toRegisterBtn").addEventListener("click", () => this.goToRegister());
     }
 
-    async loginUser() {
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+  async loginUser() {
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
 
-        try {
-            const res = await fetch(`http://localhost:8000/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
-            if (res.ok) {
-                const data = await res.json();
-                this.onSuccess(data.id);
+    try {
+        const res = await fetch(`http://localhost:8000/login?email=${encodeURIComponent(email)}&password=${encodeURIComponent(password)}`);
+        
+        if (res.ok) {
+            const data = await res.json();
+
+            // 🔹 GİRİŞ BAŞARILIYSA userId’yi localStorage’a kaydet
+            if (data.id) {
+                localStorage.setItem("userId", data.id);
+                console.log("User ID saved to localStorage:", data.id);
             } else {
-                this.showMessage("Email veya şifre yanlış!", true);
+                console.warn("User ID missing in response:", data);
             }
-        } catch (err) {
-            this.showMessage("Sunucuya bağlanılamadı!", true);
+
+            // Mevcut başarı fonksiyonunu çağır
+            this.onSuccess(data.id);
+        } else {
+            this.showMessage("Email veya şifre yanlış!", true);
         }
+    } catch (err) {
+        this.showMessage("Sunucuya bağlanılamadı!", true);
     }
+}
+
 
     goToRegister() {
         this.container.innerHTML = "";

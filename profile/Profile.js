@@ -46,29 +46,42 @@ export class Profile {
         });
 
         document.getElementById("deleteAccountBtn").addEventListener("click", () => {
-            this.deleteAccount();
+            this.deleteAccount(); // constructor’dan gelen userId kullanılacak
         });
     }
 
     async loadUser() {
-        try {
-            const res = await fetch(`http://localhost:8000/user?id=${this.userId}`);
-            if (!res.ok) throw new Error("Kullanıcı bulunamadı");
-            const user = await res.json();
+    try {
+        // 🔹 Burada userId'yi localStorage'dan alıyoruz (eklenen satır)
+        this.userId = localStorage.getItem("userId");
 
-            ["fullName", "phone", "gender", "address"].forEach(field => {
-                const span = document.getElementById(field);
-                span.textContent = user[field] || "";
-                span.addEventListener("click", () => this.makeEditable(span, field));
-            });
-            document.getElementById("email").textContent = user.email || "";
-        } catch (err) {
-            console.error(err);
-            ["fullName", "phone", "gender", "address", "email"].forEach(f => {
-                document.getElementById(f).textContent = "Yüklenemedi";
-            });
-        }
+if (!this.userId) {
+    console.warn("User ID not found in localStorage — skipping profile load.");
+    return;
+}
+
+
+        const res = await fetch(`http://localhost:8000/user?id=${this.userId}`);
+        
+        if (!res.ok) throw new Error("Kullanıcı bulunamadı");
+        const user = await res.json();
+
+        console.log("Loaded user:", user);
+
+        ["fullName", "phone", "gender", "address"].forEach(field => {
+            const span = document.getElementById(field);
+            span.textContent = user[field] || "";
+            span.addEventListener("click", () => this.makeEditable(span, field));
+        });
+        document.getElementById("email").textContent = user.email || "";
+    } catch (err) {
+        console.error(err);
+        ["fullName", "phone", "gender", "address", "email"].forEach(f => {
+            document.getElementById(f).textContent = "Yüklenemedi";
+        });
     }
+}
+
 
     makeEditable(span, field) {
         const input = document.createElement("input");
@@ -106,13 +119,18 @@ async deleteAccount() {
     const confirmDelete = confirm("Are you sure you want to delete your account? This action cannot be undone!");
     if (!confirmDelete) return;
 
-    try {
-       const res = await fetch(`http://localhost:8000/deleteUser?id=${this.userId}`, {
-    method: "DELETE",
-    headers: { "Content-Type": "application/json" }
-});
+    const userId = localStorage.getItem("userId");
+    if (!userId) {
+        console.warn("User ID not found in localStorage — probably not logged in.");
+        return; 
+    }
 
-       
+
+    try {
+        const res = await fetch(`http://localhost:8000/deleteUser?id=${this.userId}`, {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" }
+        });
 
         if (res.ok) {
             alert("Your account has been deleted successfully.");
@@ -127,5 +145,7 @@ async deleteAccount() {
         alert("Server connection failed!");
     }
 }
+
+
 
 }
