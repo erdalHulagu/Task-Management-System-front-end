@@ -64,7 +64,7 @@ export class Register {
         const data = {
             fullName: document.getElementById("fullName").value,
             phone: document.getElementById("phone").value,
-            gender: document.getElementById("gender").value,
+           gender: document.querySelector('input[name="gender"]:checked')?.value || "",
             address: document.getElementById("address").value,
             email: document.getElementById("email").value,
             password: document.getElementById("password").value
