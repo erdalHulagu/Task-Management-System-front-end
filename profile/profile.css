@@ -129,4 +129,64 @@
     padding-left: 6px;
   }
   .profile-panel { padding: 16px; gap: 8px; }
+  
+}
+.inline-edit-gender {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 50px;
+  /* border: 1px solid rgba(30,60,114,0.3); */
+  border-radius: 6px;
+  background: var(--field-bg);
+  box-sizing: border-box;
+  padding: 2px 6px;
+  position: relative;
+  overflow: hidden; /* dışa taşmayı engeller */
+}
+
+.gender-options-edit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px; /* seçenekler arası boşluk */
+}
+
+.gender-label-edit {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 0.85rem;
+  font-weight: 500;
+  /* color: var(--accent); */
+  color: var(--field-bg);
+  cursor: pointer;
+}
+
+.gender-options-edit input[type="radio"] {
+  accent-color: var(--accent);
+  cursor: pointer;
+  transform: scale(1.1);
+}
+
+/* Hover efekti */
+.inline-edit-gender:hover {
+  box-shadow: 0 0 6px rgba(30,60,114,0.15);
+  cursor: pointer;
+  
+  border-color: var(--accent);
+}
+
+/* Responsive uyum */
+@media (max-width: 600px) {
+  .inline-edit-gender {
+    height: auto;
+    flex-direction: row;
+    padding: 6px;
+  }
+  .gender-options-edit {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
 }

@@ -33,7 +33,7 @@ export class Profile {
 
                 <div style="margin-top: 20px; display:flex; gap:10px;">
                     <button id="logoutBtn" style="flex:1; background:#1e3c72; color:white; padding:8px; border-radius:6px; border:none; cursor:pointer;">Exit Profile</button>
-                    <button id="deleteAccountBtn" style="flex:1; background:#d32f2f; color:white; padding:8px; border-radius:6px; border:none; cursor:pointer;">Delete Account</button>
+                    <span id="deleteAccountBtn" style="flex:1; color:#d32f2f; padding:8px;font-size: x-small;margin-bottom:0; border-radius:6px;  cursor:pointer;">Delete Account</span>
                 </div>
 
                 <div id="message" style="margin-top:10px; color:red;"></div>
@@ -52,7 +52,7 @@ export class Profile {
 
     async loadUser() {
     try {
-        // 🔹 Burada userId'yi localStorage'dan alıyoruz (eklenen satır)
+        // Burada userId'yi localStorage'dan alıyoruz (eklenen satır)
         this.userId = localStorage.getItem("userId");
 
 if (!this.userId) {
@@ -83,38 +83,91 @@ if (!this.userId) {
 }
 
 
-    makeEditable(span, field) {
-        const input = document.createElement("input");
-        input.type = "text";
-        input.value = span.textContent;
-        input.className = "inline-edit";
-        span.replaceWith(input);
-        input.focus();
+   makeEditable(span, field) {
+    if (field === "gender") {
+        const container = document.createElement("div");
+        container.className = "inline-edit-gender";
 
-        const save = async () => {
-            const newValue = input.value.trim();
-            if (!newValue) return;
+        const mrLabel = document.createElement("label");
+        const mrInput = document.createElement("input");
+        mrInput.type = "radio";
+        mrInput.name = "editGender";
+        mrInput.value = "Mr";
+        if (span.textContent === "Mr") mrInput.checked = true;
+        mrLabel.appendChild(mrInput);
+        mrLabel.appendChild(document.createTextNode(" Mr "));
 
+        const msLabel = document.createElement("label");
+        const msInput = document.createElement("input");
+        msInput.type = "radio";
+        msInput.name = "editGender";
+        msInput.value = "Ms";
+        if (span.textContent === "Ms") msInput.checked = true;
+        msLabel.appendChild(msInput);
+        msLabel.appendChild(document.createTextNode(" Ms "));
+
+        container.appendChild(mrLabel);
+        container.appendChild(msLabel);
+
+        span.replaceWith(container);
+
+        const save = async (newValue) => {
             try {
                 const res = await fetch(`http://localhost:8000/updateUser?id=${this.userId}&field=${field}&value=${encodeURIComponent(newValue)}`);
                 if (res.ok) {
                     span.textContent = newValue;
-                    input.replaceWith(span);
+                    container.replaceWith(span);
                 } else {
                     alert("Güncelleme başarısız!");
-                    input.replaceWith(span);
+                    container.replaceWith(span);
                 }
             } catch (err) {
                 alert("Sunucuya bağlanılamadı!");
-                input.replaceWith(span);
+                container.replaceWith(span);
             }
         };
 
-        input.addEventListener("blur", save);
-        input.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") input.blur();
+        // Kullanıcı seçim yaptığında güncelleme yapılır
+        container.querySelectorAll("input[name='editGender']").forEach(input => {
+            input.addEventListener("change", () => save(input.value));
         });
+
+        return; // diğer alanlar için aşağıdaki kısım çalışmasın
     }
+
+    // Diğer alanlar için (örneğin name, email, address)
+    const input = document.createElement("input");
+    input.type = "text";
+    input.value = span.textContent;
+    input.className = "inline-edit";
+    span.replaceWith(input);
+    input.focus();
+
+    const save = async () => {
+        const newValue = input.value.trim();
+        if (!newValue) return;
+
+        try {
+            const res = await fetch(`http://localhost:8000/updateUser?id=${this.userId}&field=${field}&value=${encodeURIComponent(newValue)}`);
+            if (res.ok) {
+                span.textContent = newValue;
+                input.replaceWith(span);
+            } else {
+                alert("Güncelleme başarısız!");
+                input.replaceWith(span);
+            }
+        } catch (err) {
+            alert("Sunucuya bağlanılamadı!");
+            input.replaceWith(span);
+        }
+    };
+
+    input.addEventListener("blur", save);
+    input.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") input.blur();
+    });
+}
+
 async deleteAccount() {
     const confirmDelete = confirm("Are you sure you want to delete your account? This action cannot be undone!");
     if (!confirmDelete) return;
