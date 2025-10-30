@@ -1,4 +1,5 @@
 :root{
+  --delete: #803535;
   --accent: #1e3c72;
   --muted: #6b7a91;
   --field-bg: rgba(246,249,255,0.9);
@@ -114,6 +115,15 @@
   box-shadow: 0 8px 20px rgba(30,60,114,0.12);
   cursor: pointer;
 }
+#deleteAccountBtn{
+  color: var(--delete);
+  display: flex;
+  flex-direction: column;
+align-items: center;
+  justify-content: end;
+  font-size: x-small;
+  cursor: pointer;
+}
 
 /* küçük ekranlarda: etiket üstte, değer altta (stack) */
 @media (max-width: 600px) {
@@ -189,4 +199,72 @@
     flex-wrap: wrap;
     gap: 10px;
   }
+}
+#showUsersBtn{
+  cursor: pointer;
+  background-color: var(--accent);
+  color: #eef4ff;;
+  border-radius: 6px;
+
+}
+#userListSection {
+    display: none;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+#userListSection h3 {
+    font-size: 1rem;
+    color: var(--accent);
+    margin: 0;
+    font-weight: 600;
+}
+
+#backToProfileBtn {
+   
+    color: var(--accent);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+#userList .profile-field {
+    background: var(--field-bg);
+    padding: 8px 12px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.12s ease, background 0.12s ease;
+    cursor: default;
+}
+
+#userList .profile-field:hover {
+    transform: translateY(-2px);
+    background: #eef4ff;
+}
+
+#userList .deleteUserBtn {
+    background:var(--delete);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.12s ease;
+}
+
+#userList .deleteUserBtn:hover {
+    background: #b71c1c;
+}
+
+/* Responsive */
+@media (max-width: 600px) {
+    #userList .profile-field {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
 }
