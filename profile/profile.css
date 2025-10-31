@@ -115,15 +115,25 @@
   box-shadow: 0 8px 20px rgba(30,60,114,0.12);
   cursor: pointer;
 }
+#logoutBtn:hover {
+  background: linear-gradient(135deg, #276def, #1b3b66);
+}
+
+
 #deleteAccountBtn{
   color: var(--delete);
   display: flex;
   flex-direction: column;
-align-items: center;
+ align-items: center;
   justify-content: end;
   font-size: x-small;
   cursor: pointer;
+}#deleteAccountBtn:hover{
+font-size: small;
+color: #fa0606;
 }
+
+
 
 /* küçük ekranlarda: etiket üstte, değer altta (stack) */
 @media (max-width: 600px) {
@@ -205,8 +215,13 @@ align-items: center;
   background-color: var(--accent);
   color: #eef4ff;;
   border-radius: 6px;
+  border: none;
 
 }
+#showUsersBtn:hover{
+background: linear-gradient(135deg, #276def, #1b3b66);
+}
+
 #userListSection {
     display: none;
     flex-direction: column;
@@ -227,6 +242,10 @@ align-items: center;
     border: none;
     border-radius: 6px;
     cursor: pointer;
+}
+#backToProfileBtn:hover {
+color: #2153af;
+font-size:x-large;
 }
 
 #userList .profile-field {

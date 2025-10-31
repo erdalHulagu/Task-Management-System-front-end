@@ -1,3 +1,4 @@
+import {showCustomConfirm} from "../taskManager/taskManager.js"
 export class Profile {
     constructor(container, userId) {
         this.container = container;
@@ -35,7 +36,7 @@ export class Profile {
                     </div>
 
                     <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center; gap: 20px;">
-                        <button id="logoutBtn">Exit Profile</button>
+                        <button  id="logoutBtn">Exit Profile</button>
                         <span id="deleteAccountBtn">Delete Account</span>
                     </div>
 
@@ -50,7 +51,7 @@ export class Profile {
 
                     <div id="userListSection" style="display:none; flex-direction:column; gap:10px;">
                         <div style="display:flex; align-items:center; justify-content:space-between;">
-                        <div id="backToProfileBtn" style="font-size:20px;">⟵</div>
+                        <div id="backToProfileBtn">⟵</div>
                             <h5 style="color:#1e3c72; ">All Users</h4>
                             
                         </div>
@@ -160,16 +161,18 @@ export class Profile {
     }
 
     async deleteAccount() {
-        if (!confirm("Are you sure you want to delete your account?")) return;
-        const userId = localStorage.getItem("userId");
-        if (!userId) return;
+    const confirmed = await showCustomConfirm("Are you sure you want to delete your account?");
+    if (!confirmed) return;
 
-        try {
-            const res = await fetch(`http://localhost:8000/deleteUser?id=${this.userId}`, { method: "DELETE", headers: { "Content-Type": "application/json" } });
-            if (res.ok) { alert("Account deleted"); localStorage.removeItem("userId"); window.location.reload(); }
-            else { alert("Failed to delete account"); }
-        } catch { alert("Server connection failed"); }
-    }
+    const userId = localStorage.getItem("userId");
+    if (!userId) return;
+
+    try {
+        const res = await fetch(`http://localhost:8000/deleteUser?id=${this.userId}`, { method: "DELETE", headers: { "Content-Type": "application/json" } });
+        if (res.ok) { alert("Account deleted"); localStorage.removeItem("userId"); window.location.reload(); }
+        else { alert("Failed to delete account"); }
+    } catch { alert("Server connection failed"); }
+}
 
     // ADMIN FEATURE
     async toggleUserList() {
@@ -194,11 +197,12 @@ export class Profile {
                     <span>${u.fullName} (${u.email})</span>
                     <button class="deleteUserBtn">🗑️</button>
                 `;
-                div.querySelector(".deleteUserBtn").addEventListener("click", async () => {
-                    if (!confirm("Delete " + u.fullName + "?")) return;
-                    await this.deleteUser(u.id);
-                    await this.toggleUserList();
-                });
+               div.querySelector(".deleteUserBtn").addEventListener("click", async () => {
+               const confirmed = await showCustomConfirm("Delete " + u.fullName + "?");
+               if (!confirmed) return;
+               await this.deleteUser(u.id);
+               await this.toggleUserList(); // listeyi yenile
+});
                 userList.appendChild(div);
             });
         } catch (err) { alert("Error loading users: " + err.message); }

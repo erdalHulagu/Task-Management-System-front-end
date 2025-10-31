@@ -63,7 +63,7 @@ export class Login {
         const messageDiv = document.getElementById("message");
         messageDiv.textContent = msg;
         messageDiv.style.display = "block";
-        messageDiv.style.background = isError ? "#e74c3c" : "#2ecc71";
+        messageDiv.style.background = isError ? "#e74c3c" : "#29834fff";
         messageDiv.style.color = "#fff";
         setTimeout(() => { messageDiv.style.display = "none"; }, 3000);
     }

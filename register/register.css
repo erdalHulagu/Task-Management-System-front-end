@@ -1,8 +1,15 @@
+:root{
+  --delete: #803535;
+  --accent: #1e3c72;
+  --muted: #6b7a91;
+  --field-bg: rgba(246,249,255,0.9);
+}
+
 .gender-group {
   width: 90%;
   margin: 8px 0;
   font-size: 14px;
-  color: #585858;
+  color: var(--muted)
 }
 
 .gender-options {
@@ -22,4 +29,20 @@
 .gender-options input[type="radio"] {
   accent-color: #1e3c72;
   transform: scale(1.2);
+}
+#sendCodeBtn{
+  background-color: var(--accent);
+
+
+}
+#verifyBtn{
+  background-color: var(--accent);
+  color: var(--field-bg);
+  border-radius: 6px;
+  border: none;
+  
+}
+#verifyBtn:hover {
+  background: linear-gradient(135deg, #276def, #1b3b66);
+  cursor: pointer;
 }

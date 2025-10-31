@@ -1,10 +1,7 @@
 import { Profile } from "../profile/Profile.js";
 
-function isReminderActive(dateString) {
-    if (!dateString) return false;
-    const today = new Date().toISOString().slice(0, 10);
-    return dateString.startsWith(today);
-}
+
+
 export class TaskManager {
     constructor(taskContainer, profileContainer, userId) {
         this.taskContainer = taskContainer;
@@ -79,17 +76,22 @@ export class TaskManager {
        
     `;
     
-    li.querySelector(".update-btn").addEventListener("click", () => {
-        const newTitle = prompt("Yeni başlık:", task.title);
-        if (newTitle && newTitle.trim() !== "") {
-            this.updateTask(task.id, task);
-        }
-    });
+   li.querySelector(".update-btn").addEventListener("click", async () => {
+    const newTitle = await showCustomPrompt("Yeni başlık:", task.title);
+    if (!newTitle || newTitle.trim() === "") return;
 
-    li.querySelector(".delete-btn").addEventListener("click", () => {
-        if (confirm("Bu görevi silmek istediğine emin misin?")) {
-            this.deleteTask(task.id);
-        }
+    const newDesc = await showCustomPrompt("Yeni açıklama:", task.description || "");
+    const newDate = await showCustomPrompt("Yeni tarih (yyyy-MM-dd):", task.taskTime || "");
+
+    this.updateTask(task.id, newTitle, newDesc, newDate);
+});
+
+
+   li.querySelector(".delete-btn").addEventListener("click", async () => {
+    const confirmed = await showCustomConfirm("Bu görevi silmek istediğine emin misin?");
+    if (confirmed) {
+        this.deleteTask(task.id);
+    }
     });
 
     list.appendChild(li);
@@ -149,28 +151,23 @@ export class TaskManager {
         }
     }
 
-    async updateTask(id, oldTask) {
-        try {
-            const newTitle = prompt("Yeni başlık:", oldTask.title);
-            if (!newTitle || newTitle.trim() === "") return;
+   async updateTask(id, newTitle, newDesc, newDate) {
+    try {
+        const res = await fetch(
+            `http://localhost:8000/update?id=${id}&title=${encodeURIComponent(newTitle)}&desc=${encodeURIComponent(newDesc)}&taskTime=${encodeURIComponent(newDate)}&userId=${this.userId}`
+        );
 
-            const newDesc = prompt("Yeni açıklama:", oldTask.description || "");
-            const newDate = prompt("Yeni tarih (yyyy-MM-dd):", oldTask.taskTime || "");
-
-            const res = await fetch(
-                `http://localhost:8000/update?id=${id}&title=${encodeURIComponent(newTitle)}&desc=${encodeURIComponent(newDesc)}&taskTime=${encodeURIComponent(newDate)}&userId=${this.userId}`
-            );
-
-            if (res.ok) {
-                this.showMessage("Görev güncellendi!");
-                this.loadTasks();
-            } else {
-                this.showMessage("Güncelleme başarısız!", true);
-            }
-        } catch (err) {
-            this.showMessage("Sunucuya bağlanılamadı!", true);
+        if (res.ok) {
+            this.showMessage("Görev güncellendi!");
+            this.loadTasks();
+        } else {
+            this.showMessage("Güncelleme başarısız!", true);
         }
+    } catch (err) {
+        this.showMessage("Sunucuya bağlanılamadı!", true);
     }
+}
+
 
     showMessage(msg, isError = false) {
         const messageDiv = document.getElementById("message");
@@ -187,4 +184,98 @@ export class TaskManager {
         }, 2500);
     }
     
+    
 }
+
+
+
+
+function isReminderActive(dateString) {
+    if (!dateString) return false;
+    const today = new Date().toISOString().slice(0, 10);
+    return dateString.startsWith(today);
+}
+
+
+async function showCustomPrompt(label, oldValue = "") {
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    overlay.className = "custom-prompt-overlay";
+
+    // Tarih mi istiyoruz?
+    const isDate = label.toLowerCase().includes("tarih");
+
+    overlay.innerHTML = `
+      <div class="custom-prompt-box">
+        <h3>${label}</h3>
+        ${
+          isDate
+            ? `
+          <div class="date-wrapper">
+            <input type="date" id="customPromptInput" class="hidden-date" value="${oldValue ? oldValue.substring(0,10) : ""}">
+            <span class="date-icon" id="promptDateIcon">🗓️</span>
+          </div>
+        `
+            : `<input type="text" id="customPromptInput" value="${oldValue}" />`
+        }
+        <div class="prompt-buttons">
+          <button id="okBtn">Tamam</button>
+          <button id="cancelBtn">İptal</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // Tarih picker’ını ikonla aç
+    if (isDate) {
+      const input = overlay.querySelector("#customPromptInput");
+      const icon = overlay.querySelector("#promptDateIcon");
+      icon.addEventListener("click", () => input.showPicker());
+    }
+
+    overlay.querySelector("#okBtn").addEventListener("click", () => {
+      const value = overlay.querySelector("#customPromptInput").value.trim();
+      overlay.remove();
+      resolve(value || null);
+    });
+
+    overlay.querySelector("#cancelBtn").addEventListener("click", () => {
+      overlay.remove();
+      resolve(null);
+    });
+  });
+}
+
+
+async function showCustomConfirm(message) {
+  return new Promise((resolve) => {
+    const overlay = document.createElement("div");
+    overlay.className = "custom-prompt-overlay";
+
+    overlay.innerHTML = `
+      <div class="custom-prompt-box">
+        <h3>⚠️ Onay Gerekli</h3>
+        <p style="margin-bottom: 20px; color:#243042;">${message}</p>
+        <div class="prompt-buttons">
+          <button id="confirmOkBtn">Evet</button>
+          <button id="confirmCancelBtn">Hayır</button>
+        </div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    document.getElementById("confirmOkBtn").addEventListener("click", () => {
+      overlay.remove();
+      resolve(true);
+    });
+
+    document.getElementById("confirmCancelBtn").addEventListener("click", () => {
+      overlay.remove();
+      resolve(false);
+    });
+  });
+}
+export { showCustomConfirm };
+export { showCustomPrompt};
